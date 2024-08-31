@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<!-- color palette midnight green, chocolate cosmos, almond, air superiority blue, cocoa brown-->
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anagrams!</title>
+    <h1 id="header" class="header-title">Anagrams!</h1>
+    <link rel="stylesheet" href="style.css">
+    <script src="./script.js"></script>
+  </head>
+
+  <body class="body-container" onload="loadWords()"> <!-- typo in class is on purpose until css is fixed-->
+    <div id="scramble-container" class="scramble-container"></div>
+    <time id="timer">0</time>
+    <input id="word-input" type="text" style="text-transform:uppercase" placeholder="this is where answers will go.">
+    <button onclick="newScramble()">Start!</button>
+    <div id="update-container"></div>
+    <select id="word-length-select" >
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option selected="selected" value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+      <option value="13">13</option>
+      <option value="14">14</option>
+      <option value="15">15</option>
+    </select>
+    <div id="score"></div>
+    <div id="results-container" class="results-container">
+      <ul id="answer-list" class="list"></ul>
+      <ul id="solution-list" class="list"></ul>
+    </div>
+    
+
+  </body>
+</html>
