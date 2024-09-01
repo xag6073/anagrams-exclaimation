@@ -27,11 +27,38 @@ const words14 = ["administration", "communications", "responsibility", "transpor
 
 const words15 = ["recommendations", "characteristics", "representatives", "pharmaceuticals", "congratulations", "representations", "troubleshooting", "internationally", "confidentiality", "instrumentation", "notwithstanding", "vulnerabilities", "straightforward", "implementations", "differentiation", "environmentally", "synchronization", "accomplishments", "transplantation", "competitiveness", "interpretations", "electromagnetic", "acknowledgement", "gloucestershire", "transformations", "classifications", "entrepreneurial", "professionalism", "interconnection", "standardization", "nottinghamshire", "charlottesville", "buckinghamshire", "merchantability", "experimentation", "physiopathology", "phosphorylation", "acknowledgments", "bizjournalshire"];
 
-const words16 = ["responsibilities", "sublimedirectory", "characterization", "interoperability", "entrepreneurship", "classicvacations", "intercontinental", "acknowledgements", "gastrointestinal", "registerregister", "northamptonshire"];
-
-const words17 = ["interdisciplinary", "telecommunication", "intergovernmental", "multidisciplinary"];
-
-const words18 = ["telecommunications"];
-
-export const words_ = words2.concat(words3, words4, words5, words6, words7, words8, words9, words10, words11, words12, words13, words14, words15, words16, words17, words18);
+export function lengthArray(length) {
+  switch(length) {
+      case '2':
+          return words2;
+      case '3':
+          return words3;
+      case '4':
+          return words4;
+      case '5':
+          return words5;
+      case '6':
+          return words6;
+      case '7':
+          return words7;
+      case '8':
+          return words8;
+      case '9':
+          return words9;
+      case '10':
+          return words10;
+      case '11':
+          return words11;
+      case '12':
+          return words12;
+      case '13':
+          return words13;
+      case '14':
+          return words14;
+      case '15':
+          return words15;
+      default:
+          return [""];
+  }
+}
 

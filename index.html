@@ -9,14 +9,13 @@
     <title>Anagrams!</title>
     <h1 id="header" class="header-title">Anagrams!</h1>
     <link rel="stylesheet" href="style.css">
-    <script src="./script.js"></script>
   </head>
 
-  <body class="body-container" onload="loadWords()"> <!-- typo in class is on purpose until css is fixed-->
+  <body class="body-container"> <!-- typo in class is on purpose until css is fixed-->
     <div id="scramble-container" class="scramble-container"></div>
-    <time id="timer">0</time>
-    <input id="word-input" type="text" style="text-transform:uppercase" placeholder="this is where answers will go.">
-    <button onclick="newScramble()">Start!</button>
+    <time id="timer-container">0</time>
+    <input id="word-input" type="text" autocomplete="off" style="text-transform:uppercase" placeholder="this is where answers will go.">
+    <button id="scramble-button">Start!</button>
     <div id="update-container"></div>
     <select id="word-length-select" >
       <option value="3">3</option>
@@ -33,12 +32,12 @@
       <option value="14">14</option>
       <option value="15">15</option>
     </select>
-    <div id="score"></div>
+    <div id="score-container"></div>
     <div id="results-container" class="results-container">
       <ul id="answer-list" class="list"></ul>
       <ul id="solution-list" class="list"></ul>
     </div>
     
-
+    <script type="module" src="./script.js"></script>
   </body>
 </html>
