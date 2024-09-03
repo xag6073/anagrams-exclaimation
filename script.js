@@ -1,24 +1,17 @@
 
-import {lengthArray} from './words.js';
-
-let scramble = "";
 var timer;
 var onGame = false;
 var score = 0;
-const primeDictionary = {
-    "a" : 2, "b": 3, "c": 5, "d": 7, "e": 11, "f": 13, "g": 17, "h": 19, "i": 23, "j": 29, "k": 31, "l": 37, "m": 41, "n": 43, "o": 47, "p": 53, "q": 59, "r": 61, "s": 67, "t": 71, "u": 73, "v": 79, "w": 83, "x": 89, "y": 97, "z": 101
-}
-var previousAnswers = [];
 
 //elements
 const input = document.getElementById("word-input");
 const output = document.getElementById("update-container");
-const answerList = document.getElementById("answer-list");
 const scrambleContainer = document.getElementById("scramble-container");
 const wordLength = document.getElementById("word-length-select");
 const timerContainer = document.getElementById("timer-container");
 const scoreContainer = document.getElementById("score-container");
 const solutionList = document.getElementById("solution-list");
+const answerList = document.getElementById("answer-list");
 
 function newScramble() {
     //modify view
@@ -26,27 +19,32 @@ function newScramble() {
     answerList.innerHTML = "";
     scoreContainer.textContent = ""
     solutionList.innerHTML = "";
-    previousAnswers = [];
 
     input.setAttribute("maxlength", wordLength.value);
-    let wordArray = lengthArray(wordLength.value);
-    let index = Math.floor((Math.random() * wordArray.length)); 
-    let word = wordArray[index];
-    scramble = word;
+    fetch('/newScramble', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({length: wordLength.value}),
+    })
+    .then(response => response.json()) 
+    .then((json) => {
+        let word = json.word;
 
-    //display the scramble in random order
-    scrambleContainer.innerHTML = ""; //clear the previous scramble
-    while(word.length > 0) {
-        let rand = Math.floor(Math.random() * word.length);
-        let char = word.charAt(rand).toUpperCase();
-        word = word.substring(0, rand) + word.substring(rand + 1);
-        scrambleContainer.innerHTML += "<div class=\"scramble-item\">"+char+"</div>";
-    }
+        //display the scramble in random order
+        scrambleContainer.innerHTML = ""; //clear the previous scramble
+        while(word.length > 0) {
+            let rand = Math.floor(Math.random() * word.length);
+            let char = word.charAt(rand).toUpperCase();
+            word = word.substring(0, rand) + word.substring(rand + 1);
+            scrambleContainer.innerHTML += "<div class=\"scramble-item\">"+char+"</div>";
+        }
+    });
 
     //start timer
     const timerLength = 10;
     const startTime = Date.now();
-    score = 0;
     onGame = true;
 
     clearInterval(timer);
@@ -54,44 +52,19 @@ function newScramble() {
     timer = setInterval(timeFunction, 1000, startTime, timerLength, timerContainer);
 }
 
-function checkValid(input) {
-    if(checkAnagram(scramble, input)) {
-        if(checkWord(input)) {
-            return "valid";
-        } else {
-            return "not a word!";
-        }
-    }
-    return "not an anagram!";
-
-}
- 
-function checkAnagram(input) {
-    let productS = 1;
-    for(let i = 0; i < scramble.length; i++) {
-        productS *= primeDictionary[scramble.charAt(i)];
-    }
-    for(let i = 0; i < input.length; i++) {
-        //if there is a character in input that is not in source,
-        // then productS will have a decimal
-        productS /= primeDictionary[input.charAt(i)];
-    }
-
-    //check for decimal
-    return productS % 1 === 0; 
-}
-
-function checkWord(input) {
-    let wordArray = lengthArray(input.length + ""); //convert to text for length array
-    return wordArray.includes(input);
-}
-
 function onGameEnd() {
     onGame = false;
 
     output.textContent = "Game Over!";
-    scoreContainer.textContent = "Score: " + score;
-    solutionList.innerHTML += "<li>" + scramble + "</li>";
+
+    //update view on results
+    fetch('/results')
+    .then(response => response.json())
+    .then((json) => {
+        scoreContainer.textContent = "Score: " + json.score;
+        solutionList.innerHTML += "<li>" + json.scramble + "</li>";
+    })
+    
 }
 
 function timeFunction(startTime, timerLength, timerDiv) {
@@ -114,15 +87,19 @@ function loadEventListeners() {
     
     input.addEventListener('keydown', function(event) {
         if (event.key === "Enter" && onGame && input.value.length > 0) {
-            let message = checkValid(input.value.toLowerCase());
-            if(message === "valid" && !previousAnswers.includes(input.value)) {
-                score += input.value.length;
-                answerList.innerHTML += "<li>" + input.value + "</li>";
-                previousAnswers.push(input.value);
-            }
-
-            output.textContent = message;            
-            input.value = "";
+            fetch('/checkValid', {
+                method: "POST",
+                body: JSON.stringify({input: input.value.toUpperCase()}),
+            })
+            .then(response => response.json())
+            .then((json) => {
+                let message = json.message;
+                if(message === "valid") {
+                    answerList.innerHTML += "<li>" + input.value + "</li>";
+                }
+                output.textContent = message;
+                input.value = "";
+            });        
         }
     }); 
 }
