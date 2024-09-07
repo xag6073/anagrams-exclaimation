@@ -40,8 +40,11 @@ function newScramble() {
             word = word.substring(0, rand) + word.substring(rand + 1);
             scrambleContainer.innerHTML += "<div class=\"scramble-item\">"+char+"</div>";
         }
+        onGameStart();
     });
+}
 
+function onGameStart() {
     //start timer
     const timerLength = 10;
     const startTime = Date.now();
