@@ -12,30 +12,32 @@
   </head>
 
   <body class="body-container"> <!-- typo in class is on purpose until css is fixed-->
+    <time id="timer-container" class="timer-container">0</time>
     <div id="scramble-container" class="scramble-container"></div>
-    <time id="timer-container">0</time>
-    <input id="word-input" type="text" autocomplete="off" style="text-transform:uppercase" placeholder="this is where answers will go.">
-    <button id="scramble-button">Start!</button>
+    <input id="word-input" class="word-input" type="text" autocomplete="off" style="text-transform:uppercase">
     <div id="update-container"></div>
-    <select id="word-length-select" >
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option selected="selected" value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-      <option value="11">11</option>
-      <option value="12">12</option>
-      <option value="13">13</option>
-      <option value="14">14</option>
-      <option value="15">15</option>
-    </select>
+
+    <div id="game-container">
+      <button id="scramble-button" class="scramble-button">Start</button>
+      <select id="word-length-select" class="word-length-select">
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option selected="selected" value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+      </select>
+    </div>
     <div id="score-container"></div>
-    <div id="results-container" class="results-container">
-      <ul id="answer-list" class="list"></ul>
-      <ul id="solution-list" class="list"></ul>
+    <div id="solution-list" class="solution-list"></div>      
+    <div id="answer-list" class="answer-list">
     </div>
     
     <script type="module" src="./script.js"></script>

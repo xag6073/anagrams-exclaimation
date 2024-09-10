@@ -46,7 +46,7 @@ function newScramble() {
 
 function onGameStart() {
     //start timer
-    const timerLength = 10;
+    const timerLength = 20;
     const startTime = Date.now();
     onGame = true;
 
@@ -65,7 +65,7 @@ function onGameEnd() {
     .then(response => response.json())
     .then((json) => {
         scoreContainer.textContent = "Score: " + json.score;
-        solutionList.innerHTML += "<li>" + json.scramble + "</li>";
+        solutionList.textContent = "Answer: " + json.scramble
     })
     
 }
@@ -98,7 +98,7 @@ function loadEventListeners() {
             .then((json) => {
                 let message = json.message;
                 if(message === "valid") {
-                    answerList.innerHTML += "<li>" + input.value + "</li>";
+                    answerList.innerHTML += "<li class=\"answer-item\">" + input.value + "</li>";
                 }
                 output.textContent = message;
                 input.value = "";
