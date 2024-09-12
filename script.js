@@ -1,4 +1,6 @@
 
+
+
 var timer;
 var onGame = false;
 var score = 0;
@@ -90,6 +92,7 @@ function loadEventListeners() {
     
     input.addEventListener('keydown', function(event) {
         if (event.key === "Enter" && onGame && input.value.length > 0) {
+            //check if the input is valid w/ server
             fetch('/checkValid', {
                 method: "POST",
                 body: JSON.stringify({input: input.value.toUpperCase()}),
@@ -97,7 +100,7 @@ function loadEventListeners() {
             .then(response => response.json())
             .then((json) => {
                 let message = json.message;
-                if(message === "valid") {
+                if(message === "Valid") {
                     answerList.innerHTML += "<li class=\"answer-item\">" + input.value + "</li>";
                 }
                 output.textContent = message;

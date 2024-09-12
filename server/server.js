@@ -1,12 +1,42 @@
-const { createServer } = require('node:http');
+/**
+ * @file server.js
+ * @description This file creates an HTTP server to handle various routes for an anagram project.
+ * 
+ * @requires node:http
+ * @requires ./api.js
+ * @requires node:fs
+ * 
+ * @constant {string} hostname - The hostname for the server.
+ * @constant {number} port - The port number for the server.
+ */
+
+const { createServer } = require('http');
 const api = require('./api.js');
+const fs = require('fs');
 
-const fs = require('node:fs');
+hostname = 'localhost';
+port = 3000;
 
-const hostname = '127.0.0.1';
-const port = 3000;
+api.loadWords(); //starts api
 
-api.loadWords();
+/** 
+ * @function createServer
+ * @description Creates an HTTP server to handle various routes for an anagram project.
+ *
+ * Routes:
+ * - `/`: Serves the `index.html` file.
+ * - `/script.js`: Serves the `script.js` file.
+ * - `/style.css`: Serves the `style.css` file.
+ * - `/words.js`: Serves the `words.js` file.
+ * - `/checkValid`: Accepts a POST request with JSON data to check if the input is a valid word.
+ * - `/newScramble`: Accepts a POST request with JSON data to generate a new scrambled word of a given length.
+ * - `/results`: Returns the results of the anagram game in JSON format.
+ * 
+ * Each route sets the appropriate `Content-Type` header and status code before sending the response.
+ * 
+ * @param {http.IncomingMessage} req - The incoming request object.
+ * @param {http.ServerResponse} res - The outgoing response object.
+ */
 
 const server = createServer((req, res) => {
   if(req.url === '/') {

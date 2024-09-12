@@ -41,23 +41,25 @@ function addWord(word) {
 
 function newScramble(length) {
   score = 0;
+  previousAnswers = [];
   scramble = wordArray[length][Math.floor(Math.random() * wordArray[length].length)];
   return scramble;
 }
 
 function checkValid(input) {
-  if(checkAnagram(scramble, input)) {
+  input = input.trim();
+  if(checkAnagram(input)) {
       if(previousAnswers.includes(input)) {
-          return "already used";
+          return "Already Used";
       } else if(checkWord(input)) {
           previousAnswers.push(input);
           score += input.length;
-          return "valid";
+          return "Valid";
       } else {
-          return "not a word";
+          return "Not A Word";
       }
   }
-  return "not an anagram";
+  return "Not An Anagram";
 }
 
 function checkAnagram(input) {
