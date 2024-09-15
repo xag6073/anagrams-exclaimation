@@ -1,4 +1,5 @@
 
+const gameMan = require("./gameManager.js");
 
 const primeDictionary = {
   "A": 2, "B": 3, "C": 5, "D": 7, "E": 11, "F": 13, "G": 17, "H": 19, "I": 23, "J": 29, "K": 31, "L": 37, "M": 41, "N": 43, "O": 47, "P": 53, "Q": 59, "R": 61, "S": 67, "T": 71, "U": 73, "V": 79, "W": 83, "X": 89, "Y": 97, "Z": 101
@@ -6,10 +7,6 @@ const primeDictionary = {
 
 let wordSet = new Set();
 let wordArray = [[]];
-
-let score = 0;
-let scramble = "";
-let previousAnswers = [];
 
 function loadWords() {
   const fs = require("fs");
@@ -40,20 +37,25 @@ function addWord(word) {
 }
 
 function newScramble(length) {
-  score = 0;
-  previousAnswers = [];
   scramble = wordArray[length][Math.floor(Math.random() * wordArray[length].length)];
-  return scramble;
+  game = gameMan.addGame(scramble);
+  return game;
 }
 
-function checkValid(input) {
+function checkValid(input, gameid) {
   input = input.trim();
+  let currGame = gameMan.games.get(gameid);
+  console.log(gameid);
+  if(currGame === undefined) {
+      return "No Game Found";
+  }
+
   if(checkAnagram(input)) {
-      if(previousAnswers.includes(input)) {
+      if(currGame.previousAnswers.includes(input)) {
           return "Already Used";
       } else if(checkWord(input)) {
-          previousAnswers.push(input);
-          score += input.length;
+          currGame.previousAnswers.push(input);
+          currGame.score += input.length;
           return "Valid";
       } else {
           return "Not A Word";
@@ -81,8 +83,12 @@ function checkWord(input) {
   return wordSet.has(input);
 }
 
-function returnResults() {
-  return {score: score, scramble: scramble};
+function returnResults(gameid) {
+  let currGame = gameMan.games.get(gameid);
+  if(currGame === undefined) {
+    return "No Game Found";
+  }
+  return {score: currGame.score, scramble: currGame.scramble};
 }
 
 module.exports = { loadWords, checkValid, newScramble, returnResults };

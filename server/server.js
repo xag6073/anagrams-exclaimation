@@ -45,24 +45,28 @@ const server = createServer((req, res) => {
       res.statusCode = 200;
       res.end(data);
     });
+
   } else if(req.url === '/script.js') {
     fs.readFile('script.js', (err, data) => {
       res.setHeader('Content-Type', 'text/javascript');
       res.statusCode = 200;
       res.end(data);
     });
+
   } else if(req.url === '/style.css') {
     fs.readFile('style.css', (err, data) => {
       res.setHeader('Content-Type', 'text/css');
       res.statusCode = 200;
       res.end(data);
     });
+
   } else if(req.url === '/words.js') {
     fs.readFile('words.js', (err, data) => {
       res.setHeader('Content-Type', 'text/javascript');
       res.statusCode = 200;
       res.end(data);
     });
+
   } else if(req.url === '/checkValid') {
     let body = '';
     req.on('data', chunk => {
@@ -70,11 +74,12 @@ const server = createServer((req, res) => {
     });
     req.on('end', () => {
       const parsedData = JSON.parse(body);
-      let msg = api.checkValid(parsedData.input);
+      let msg = api.checkValid(parsedData.input, parsedData.gameId);
       res.setHeader('Content-Type', 'application/json');
       res.statusCode = 200;
       res.end(JSON.stringify({ message: msg }));
     });
+
   } else if(req.url === '/newScramble') {
     let body = '';
     req.on('data', chunk => {
@@ -82,15 +87,17 @@ const server = createServer((req, res) => {
     });
     req.on('end', () => {
       const parsedData = JSON.parse(body);
-      let word = api.newScramble(parsedData.length);
+      let game = api.newScramble(parsedData.length);
       res.setHeader('Content-Type', 'application/json');
       res.statusCode = 200;
-      res.end(JSON.stringify({ word: word }));
+      res.end(JSON.stringify({ gameId: game.id, scramble: game.scramble }));
     });
+
   } else if(req.url === '/results') {
       res.setHeader('Content-Type', 'application/json');
       res.statusCode = 200;
       res.end(JSON.stringify(api.returnResults()));
+      
   } else {
     res.end();
   }
