@@ -23,14 +23,7 @@ addEventListener("DOMContentLoaded", (event) => {
 
         //POST request to server to start new game
         input.setAttribute("maxlength", wordLength.value);
-        fetch('/newScramble', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({length: wordLength.value}),
-        })
-        .then(response => response.json()) 
+        handleFetch('/newScramble', 'POST', {length: wordLength.value})
         .then((json) => {
             let scramble = json.scramble;
             gameId = json.gameId;
@@ -44,6 +37,9 @@ addEventListener("DOMContentLoaded", (event) => {
                 scrambleContainer.innerHTML += "<div class=\"scramble-item\">"+char+"</div>";
             }
             onGameStart();
+        })
+        .catch(error => {
+            alert("HTTP Error: try again later.");
         });
     }
 
@@ -64,12 +60,14 @@ addEventListener("DOMContentLoaded", (event) => {
         output.textContent = "Game Over!";
 
         //GET request to update results
-        fetch('/results')
-        .then(response => response.json())
+        handleFetch('/results', 'POST', {gameId: gameId})
         .then((json) => {
             scoreContainer.textContent = "Score: " + json.score;
             solutionList.textContent = "Answer: " + json.scramble
         })
+        .catch(error => {
+            alert("HTTP Error: results unavailable.");
+        });
         
     }
 
@@ -93,13 +91,9 @@ addEventListener("DOMContentLoaded", (event) => {
         
         input.addEventListener('keydown', function(event) {
             if (event.key === "Enter" && onGame && input.value.length > 0) {
-                
+
                 //POST request to check if the input is valid
-                fetch('/checkValid', {
-                    method: "POST",
-                    body: JSON.stringify({input: input.value.toUpperCase(), gameId: gameId}),
-                })
-                .then(response => response.json())
+                handleFetch('/checkValid', 'POST', {input: input.value.toUpperCase(), gameId: gameId})
                 .then((json) => {
                     let message = json.message;
                     if(message === "Valid") {
@@ -107,10 +101,41 @@ addEventListener("DOMContentLoaded", (event) => {
                     }
                     output.textContent = message;
                     input.value = "";
-                });        
+                })
+                .catch(error => {
+                    alert("HTTP Error: please try again.");
+                });
+                     
             }
         }); 
     }
 
     loadEventListeners();
 })
+
+async function handleFetch(url, method, data = null) {
+    try {
+        let options = {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        };
+
+        if(method === 'POST' && data) {
+            options.body = JSON.stringify(data);
+        }
+
+        const response = await fetch(url, options);
+
+        if(!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}

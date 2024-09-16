@@ -40,13 +40,13 @@ api.loadWords(); //starts api
 
 const server = createServer((req, res) => {
   if(req.url === '/') {
-    handleGetFileRequest('index.html', res);
+    handleGetFileRequest('index.html', res, 'text/html');
 
   } else if(req.url === '/script.js') {
-    handleGetFileRequest('script.js', res);
+    handleGetFileRequest('script.js', res, 'text/javascript');
 
   } else if(req.url === '/style.css') {
-    handleGetFileRequest('style.css', res);
+    handleGetFileRequest('style.css', res, 'text/css');
 
   } else if(req.url === '/checkValid') {
     handlePostRequest(req, res, (parsedData) => {
@@ -68,26 +68,33 @@ const server = createServer((req, res) => {
       res.statusCode = 200;
       res.end(JSON.stringify({ gameId: game.id, scramble: game.scramble }));
     });
-    
+
   } else if(req.url === '/results') {
-      res.setHeader('Content-Type', 'application/json');
-      res.statusCode = 200;
-      res.end(JSON.stringify(api.returnResults()));
-      
+      handlePostRequest(req, res, (parsedData) => {
+        let results = api.returnResults(parsedData.gameId);
+        if(results === "NGF") {
+          res.statusCode = 400;
+          res.end();
+        } else {
+          res.setHeader('Content-Type', 'application/json');
+          res.statusCode = 200;
+          res.end(JSON.stringify(results));
+        }
+      });
   } else {
     res.statusCode = 404;
     res.end();
   }
 });
 
-function handleGetFileRequest(req, res) {
+function handleGetFileRequest(req, res, mimeType) {
   fs.readFile(req, (err, data) => {
     if(err) {
       console.error(err.message);
       res.statusCode = 500;
       res.end();
     } else {
-      res.setHeader('Content-Type', 'text/javascript');
+      res.setHeader('Content-Type', mimeType);
       res.statusCode = 200;
       res.end(data);
     }
