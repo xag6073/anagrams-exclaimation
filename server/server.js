@@ -40,68 +40,76 @@ api.loadWords(); //starts api
 
 const server = createServer((req, res) => {
   if(req.url === '/') {
-    fs.readFile('index.html', (err, data) => {
-      res.setHeader('Content-Type', 'text/html');
-      res.statusCode = 200;
-      res.end(data);
-    });
+    handleGetFileRequest('index.html', res);
 
   } else if(req.url === '/script.js') {
-    fs.readFile('script.js', (err, data) => {
-      res.setHeader('Content-Type', 'text/javascript');
-      res.statusCode = 200;
-      res.end(data);
-    });
+    handleGetFileRequest('script.js', res);
 
   } else if(req.url === '/style.css') {
-    fs.readFile('style.css', (err, data) => {
-      res.setHeader('Content-Type', 'text/css');
-      res.statusCode = 200;
-      res.end(data);
-    });
-
-  } else if(req.url === '/words.js') {
-    fs.readFile('words.js', (err, data) => {
-      res.setHeader('Content-Type', 'text/javascript');
-      res.statusCode = 200;
-      res.end(data);
-    });
+    handleGetFileRequest('style.css', res);
 
   } else if(req.url === '/checkValid') {
-    let body = '';
-    req.on('data', chunk => {
-      body += chunk.toString();
-    });
-    req.on('end', () => {
-      const parsedData = JSON.parse(body);
-      let msg = api.checkValid(parsedData.input, parsedData.gameId);
-      res.setHeader('Content-Type', 'application/json');
-      res.statusCode = 200;
-      res.end(JSON.stringify({ message: msg }));
-    });
+    handlePostRequest(req, res, (parsedData) => {
+      const msg = api.checkValid(parsedData.input, parsedData.gameId);
+      if(msg === "No Game Found") {
+        res.statusCode = 404;
+        res.end();
+      } else {
+        res.setHeader('Content-Type', 'application/json');
+        res.statusCode = 200;
+        res.end(JSON.stringify({ message: msg}));
+      }
+  });
 
   } else if(req.url === '/newScramble') {
-    let body = '';
-    req.on('data', chunk => {
-      body += chunk.toString();
-    });
-    req.on('end', () => {
-      const parsedData = JSON.parse(body);
-      let game = api.newScramble(parsedData.length);
+    handlePostRequest(req, res, (parsedData) => {
+      const game = api.newScramble(parsedData.length);
       res.setHeader('Content-Type', 'application/json');
       res.statusCode = 200;
       res.end(JSON.stringify({ gameId: game.id, scramble: game.scramble }));
     });
-
+    
   } else if(req.url === '/results') {
       res.setHeader('Content-Type', 'application/json');
       res.statusCode = 200;
       res.end(JSON.stringify(api.returnResults()));
       
   } else {
+    res.statusCode = 404;
     res.end();
   }
 });
+
+function handleGetFileRequest(req, res) {
+  fs.readFile(req, (err, data) => {
+    if(err) {
+      console.error(err.message);
+      res.statusCode = 500;
+      res.end();
+    } else {
+      res.setHeader('Content-Type', 'text/javascript');
+      res.statusCode = 200;
+      res.end(data);
+    }
+  });
+}
+
+function handlePostRequest(req, res, callback) {
+  let body = '';
+  req.on('data', chunk => {
+    body += chunk.toString();
+  });
+  req.on('end', () => {
+    try {
+      const parsedData = JSON.parse(body);
+      callback(parsedData);
+    } catch (err) {
+      console.error(err.message);
+      res.statusCode = 400;
+      res.end();
+    }
+  });
+}
 
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
