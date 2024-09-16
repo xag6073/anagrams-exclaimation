@@ -13,7 +13,7 @@ class Game {
 function addGame(scramble) {
   //generates random id that is not in map
   let id = Math.floor(Math.random() * 1000);
-  while(games.has(id)) {
+  while (games.has(id)) {
     id = Math.floor(Math.floor(Math.random() * 1000));
   }
 
@@ -23,7 +23,7 @@ function addGame(scramble) {
 }
 
 function removeGame(game) {
-  if(!games.delete(game.id)) {
+  if (!games.delete(game.id)) {
     return false;
   }
   return true;

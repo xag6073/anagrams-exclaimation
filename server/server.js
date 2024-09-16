@@ -39,29 +39,29 @@ api.loadWords(); //starts api
  */
 
 const server = createServer((req, res) => {
-  if(req.url === '/') {
+  if (req.url === '/') {
     handleGetFileRequest('index.html', res, 'text/html');
 
-  } else if(req.url === '/script.js') {
+  } else if (req.url === '/script.js') {
     handleGetFileRequest('script.js', res, 'text/javascript');
 
-  } else if(req.url === '/style.css') {
+  } else if (req.url === '/style.css') {
     handleGetFileRequest('style.css', res, 'text/css');
 
-  } else if(req.url === '/checkValid') {
+  } else if (req.url === '/checkValid') {
     handlePostRequest(req, res, (parsedData) => {
       const msg = api.checkValid(parsedData.input, parsedData.gameId);
-      if(msg === "No Game Found") {
+      if (msg === 'NGF') {
         res.statusCode = 404;
         res.end();
       } else {
         res.setHeader('Content-Type', 'application/json');
         res.statusCode = 200;
-        res.end(JSON.stringify({ message: msg}));
+        res.end(JSON.stringify({ message: msg }));
       }
-  });
+    });
 
-  } else if(req.url === '/newScramble') {
+  } else if (req.url === '/newScramble') {
     handlePostRequest(req, res, (parsedData) => {
       const game = api.newScramble(parsedData.length);
       res.setHeader('Content-Type', 'application/json');
@@ -69,18 +69,18 @@ const server = createServer((req, res) => {
       res.end(JSON.stringify({ gameId: game.id, scramble: game.scramble }));
     });
 
-  } else if(req.url === '/results') {
-      handlePostRequest(req, res, (parsedData) => {
-        let results = api.returnResults(parsedData.gameId);
-        if(results === "NGF") {
-          res.statusCode = 400;
-          res.end();
-        } else {
-          res.setHeader('Content-Type', 'application/json');
-          res.statusCode = 200;
-          res.end(JSON.stringify(results));
-        }
-      });
+  } else if (req.url === '/results') {
+    handlePostRequest(req, res, (parsedData) => {
+      let results = api.returnResults(parsedData.gameId);
+      if (results === 'NGF') {
+        res.statusCode = 400;
+        res.end();
+      } else {
+        res.setHeader('Content-Type', 'application/json');
+        res.statusCode = 200;
+        res.end(JSON.stringify(results));
+      }
+    });
   } else {
     res.statusCode = 404;
     res.end();
@@ -89,7 +89,7 @@ const server = createServer((req, res) => {
 
 function handleGetFileRequest(req, res, mimeType) {
   fs.readFile(req, (err, data) => {
-    if(err) {
+    if (err) {
       console.error(err.message);
       res.statusCode = 500;
       res.end();

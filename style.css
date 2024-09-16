@@ -1,6 +1,6 @@
 .header-title {
   font-size: 2rem;
-  font-family: "Courier New", Courier, monospace;
+  font-family: 'Courier New', Courier, monospace;
   color: #d4a373;
 }
 
@@ -10,7 +10,8 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  height: 100vh; /* Full viewport height */
+  height: 100vh;
+  /* Full viewport height */
   margin: 10px;
   box-sizing: border-box;
   background-color: #faedcd;
@@ -22,7 +23,7 @@
   flex-wrap: wrap;
   gap: 10px;
   border-spacing: 1%;
-  transition: all 0.5s ease-in; 
+  transition: all 0.5s ease-in;
 }
 
 .game-container {
@@ -37,7 +38,7 @@
   padding: 10px;
   letter-spacing: 0.5px;
   font-size: 1rem;
-  font-family: "Arial", sans-serif, bold;
+  font-family: 'Arial', sans-serif, bold;
   border: none;
   border-radius: 5px;
   background-color: #d4a373;
@@ -51,7 +52,8 @@
   border-width: 2px;
   outline-color: #d86c00;
   position: absolute;
-  left: 55%; /* Position it to the right of the button */
+  left: 55%;
+  /* Position it to the right of the button */
   transform: translateY(20%);
 }
 
@@ -60,7 +62,7 @@
   height: 1.2rem;
   display: grid;
   border-radius: 10px;
-  font: 1.2rem "Arial", sans-serif, bold;
+  font: 1.2rem 'Arial', sans-serif, bold;
   place-items: center;
   padding: 10px;
   background-color: #d4a373;
@@ -85,7 +87,7 @@
   justify-content: center;
   padding: 10px;
   background-color: #d4a373;
-  font-family: "Verdana", sans-serif;
+  font-family: 'Verdana', sans-serif;
   font-weight: 500;
   border: none;
 }
