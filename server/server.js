@@ -14,7 +14,7 @@ const { createServer } = require('http');
 const api = require('./api.js');
 const fs = require('fs');
 
-hostname = 'localhost';
+hostname = '0.0.0.0'; //127.0.0.1 or 0.0.0.0
 port = 3000;
 
 api.loadWords(); //starts api
@@ -37,7 +37,6 @@ api.loadWords(); //starts api
  * @param {http.IncomingMessage} req - The incoming request object.
  * @param {http.ServerResponse} res - The outgoing response object.
  */
-
 const server = createServer((req, res) => {
   if (req.url === '/') {
     handleGetFileRequest('index.html', res, 'text/html');
@@ -118,6 +117,7 @@ function handlePostRequest(req, res, callback) {
   });
 }
 
+//listen for requests
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });

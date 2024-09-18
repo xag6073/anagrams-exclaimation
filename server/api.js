@@ -1,3 +1,11 @@
+/**
+ * @file api.js
+ * @description This file loads words from dict.txt and performs requests for the server.
+ * 
+ * @requires ./gameManager.js
+ * 
+ * @constant {array} primeDictionary - A dictionary of prime numbers for each letter of the alphabet.
+ */
 
 const gameMan = require('./gameManager.js');
 
@@ -50,7 +58,7 @@ function checkValid(input, gameid) {
     return 'NGF'; //no game found
   }
 
-  if (checkAnagram(input)) {
+  if (checkAnagram(input, currGame.scramble)) {
     if (currGame.previousAnswers.includes(input)) {
       return 'Already Used';
     } else if (checkWord(input)) {
@@ -64,7 +72,7 @@ function checkValid(input, gameid) {
   return 'Not An Anagram';
 }
 
-function checkAnagram(input) {
+function checkAnagram(input, scramble) {
   let productS = 1;
   for (let i = 0; i < scramble.length; i++) {
     productS *= primeDictionary[scramble.charAt(i)];

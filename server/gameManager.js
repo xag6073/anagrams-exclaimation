@@ -1,3 +1,9 @@
+/**
+ * @file gameManager.js
+ * @description This file defines and keeps track of all current game states.
+ *
+ * @constructor Game - Represents a game state.
+ */
 
 let games = new Map();
 

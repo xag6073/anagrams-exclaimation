@@ -1,5 +1,9 @@
+/**
+ * @file script.js
+ * @description This file manages html elements to display api states. 
+ */
 
-addEventListener('DOMContentLoaded', (event) => {
+addEventListener('DOMContentLoaded', () => {
     var timer;
     var onGame = false;
     var gameId = 0;
@@ -45,19 +49,20 @@ addEventListener('DOMContentLoaded', (event) => {
 
     function onGameStart() {
         //start timer
-        const timerLength = 40;
+        const timerLength = 10;
         const startTime = Date.now();
         onGame = true;
 
         clearInterval(timer);
-        timeFunction(startTime, timerLength, timerContainer);
-        timer = setInterval(timeFunction, 1000, startTime, timerLength, timerContainer);
+        timeFunction(startTime, timerLength);
+        timer = setInterval(timeFunction, 1000, startTime, timerLength);
     }
 
     function onGameEnd() {
         onGame = false;
-
+        
         output.textContent = 'Game Over!';
+        timerContainer.textContent = 0;
 
         //GET request to update results
         handleFetch('/results', 'POST', { gameId: gameId })
@@ -71,12 +76,12 @@ addEventListener('DOMContentLoaded', (event) => {
 
     }
 
-    function timeFunction(startTime, timerLength, timerDiv) {
+    function timeFunction(startTime, timerLength) {
         const currentTime = Date.now();
         let timeLeft = timerLength - Math.floor((currentTime - startTime) / 1000);
         let seconds = Math.floor(timeLeft % 3600 % 60);
 
-        timerDiv.textContent = seconds;
+        timerContainer.textContent = seconds;
 
         if (timeLeft <= 0) {
             timeLeft = 0;
