@@ -51,9 +51,9 @@
   border-color: #d4a373;
   border-width: 2px;
   outline-color: #d86c00;
-  position: absolute;
-  left: 55%;
   /* Position it to the right of the button */
+  position: absolute;
+  left: 50vw + 100px;
   transform: translateY(20%);
 }
 
@@ -69,7 +69,8 @@
 }
 
 .word-input {
-  width: 20%;
+  /*Keep input width big enough for max length*/
+  width: clamp(150px, 20%);
   padding: 10px;
   font-size: 1rem;
   box-sizing: border-box;
