@@ -49,7 +49,7 @@ addEventListener('DOMContentLoaded', () => {
 
     function onGameStart() {
         //start timer
-        const timerLength = 10;
+        const timerLength = 60;
         const startTime = Date.now();
         onGame = true;
 
